@@ -2,6 +2,28 @@
 # -*- coding: utf-8 -*-
 # Created by   2016/07/12 
 
+import re
+import requests
+from bs4 import BeautifulSoup
+
+
+
+url = 'http://www.qy7788.com.cn/shiyongxinxi/shiyongxinxi193.html'
+
+webcontext = requests.get(url).text
+
+regex= re.compile('<div class="carea">(.+?)</div>',re.S)
+
+urlregex = re.compile(r'<a href="(http://www.qy7788.com.cn/.+?/)\">(.+?)</a>',re.S)
+
+for line in re.findall(urlregex,webcontext):
+    print line[0],'\t' * 10,line[1]
+
+
+# print re.findall(regex,webcontext)
+# soup = BeautifulSoup(webcontext,'lxml')
+# print soup.find_all('a')
+
 
 
 import random
