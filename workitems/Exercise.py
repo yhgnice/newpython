@@ -1,23 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Created by   2016/07/13 
-import  sys
-x = 0x1234
-print sys.getsizeof(x)
-print sys.getrefcount(x)
-y = x
+# Created by   2016/07/13
+from multiprocessing import Pool
 
-import types
-x = 20
-print type(x) is types.IntType
+import time
 
-print x.__class__
+def f(x):
+    time.sleep(1)
+    return x*x
 
-y = x
-print hex(id(x)),hex(id(y))
-
-
-hex(id(int)),hex(id(types.IntType))
 
 if __name__ == '__main__':
-    pass
+    p = Pool(100)
+    print p.map(f,range(100))
+    print 'test'

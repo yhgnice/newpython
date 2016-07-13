@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="sftp" showNewOnSourceInSync="false" showNewOnTargetInSync="false">
+    <serverData>
+      <paths name="Copy of project-level server 'sftp'">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/yhg" local="$PROJECT_DIR$" web="/home/yhg" />
+            <mapping local="" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/workitems" />
+            <excludedPath path="/home/yhg" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="sftp">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/yhg" local="$PROJECT_DIR$" web="/home/yhg" />
+            <mapping local="" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/workitems" />
+            <excludedPath path="/home/yhg" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
