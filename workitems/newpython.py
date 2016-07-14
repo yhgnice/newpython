@@ -10,18 +10,20 @@ import zipfile
 import re
 
 spath = r'E:\upgrade\template'
-file = r'E:\upgrade\2016-07-14\cachelist.html'
+
+
+cachelist = os.path.join(spath,'cachelist.html')
 
 
 def outdir():
     try:
-        dirs = time.strftime("%m%d", time.localtime())
+        dirs = time.strftime("%m%d", time.localtime()) + str('01')
         dpath = os.path.join('E:\upgrade', dirs)
         while True:
 
             if not os.path.exists(dpath):
-                # shutil.copytree(spath, dpath)
-                os.mkdir(dpath)
+                shutil.copytree(spath, dpath)
+                # os.mkdir(dpath)
                 break
             else:
                 print '%s,目录已存在' % dpath
@@ -41,6 +43,9 @@ def dump_table(tables):
             tables=tables, output=output)
         os.system(mysqlcmd)
         os.chdir(dpath)
+        batfile = 'echo {mysqlcmd} > sql.bat '.format(mysqlcmd=mysqlcmd)
+        os.system(batfile)
+
         zipname = 'db_gamedata_update.zip'
         f = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
         f.write('db_gamedata_update.sql')
@@ -62,7 +67,7 @@ def write_sql(info):
 def html_re(searhstr):
     pt = re.compile('td>(.+?)</td>            <td align="left">(.+?)</td>', re.S)
 
-    with open(file) as fs:
+    with open(cachelist) as fs:
         rest = pt.findall(fs.read().decode('gbk'))
         # strf = str(raw_input('please input search:'))
         for line in rest:
@@ -76,14 +81,18 @@ def updata_sql(tables):
         res1 = re.sub('t_', '', tab)
         searhstr = re.sub('_', '', res1)
         print searhstr
+        if 'xsactivityitemreal' == searhstr:
+            html_re('xsactvityrewarditemReal')
         html_re(searhstr)
 
 
-if __name__ == '__main__':
+def main():
     global tables
-    tables =str(raw_input('please input tables:\n'))
-    # tables = 't_panel'
     dump_table(tables)
-
     updata_sql(tables)
-    pass
+
+if __name__ == '__main__':
+
+    tables =str(raw_input('please input tables:\n'))
+    main()
+    # tables = 't_panel'
