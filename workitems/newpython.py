@@ -2,34 +2,43 @@
 # -*- coding: utf-8 -*-
 # Created by   2016/07/13
 
-import datetime
+
+import time
 import os
 import shutil
 import zipfile
-
-new = datetime.date.today()
+import re
 
 spath = r'E:\upgrade\template'
+file = r'E:\upgrade\2016-07-14\cachelist.html'
 
-dpath = r'E:\upgrade\%s' % new
+
+def outdir():
+    try:
+        dirs = time.strftime("%m%d", time.localtime())
+        dpath = os.path.join('E:\upgrade', dirs)
+        while True:
+
+            if not os.path.exists(dpath):
+                # shutil.copytree(spath, dpath)
+                os.mkdir(dpath)
+                break
+            else:
+                print '%s,目录已存在' % dpath
+                newdir = (raw_input('please input direct:\n'))
+                dpath = os.path.join('E:\upgrade', newdir)
+        return dpath
+    except Exception,e:
+        print e
 
 
-def copy_dir():
-    if not os.path.exists(dpath):
-        shutil.copytree(spath, dpath)
-        print 'Creating Success %s' % dpath
-        return True
-    else:
-        print 'this  %s  is  exists' % dpath
-        return False
-
+dpath = os.path.join('E:\upgrade',outdir())
 
 def dump_table(tables):
     try:
         output = dpath + '\db_gamedata_update.sql'
         mysqlcmd = '''mysqldump  --lock-tables=false -h188.188.1.158 -uroot -plhb!@#$ aj2_gamedata_v2  {tables} t_identity_ver  > {output} '''.format(
             tables=tables, output=output)
-        # print mysqlcmd
         os.system(mysqlcmd)
         os.chdir(dpath)
         zipname = 'db_gamedata_update.zip'
@@ -43,32 +52,38 @@ def dump_table(tables):
         print os.path.dirname(output)
 
 
+def write_sql(info):
+    outsql=os.path.join(dpath,'update.sql')
+    with open(outsql, 'a') as sql_write:
+        sql_write.write(info)
+        sql_write.write('\n')
+
+
+def html_re(searhstr):
+    pt = re.compile('td>(.+?)</td>            <td align="left">(.+?)</td>', re.S)
+
+    with open(file) as fs:
+        rest = pt.findall(fs.read().decode('gbk'))
+        # strf = str(raw_input('please input search:'))
+        for line in rest:
+            if re.findall(searhstr, line[1], re.I):
+                print line[0], line[1]
+                write_sql(line[1])
+
+
+def updata_sql(tables):
+    for tab in tables.split():
+        res1 = re.sub('t_', '', tab)
+        searhstr = re.sub('_', '', res1)
+        print searhstr
+        html_re(searhstr)
+
+
 if __name__ == '__main__':
+    global tables
+    tables =str(raw_input('please input tables:\n'))
+    # tables = 't_panel'
+    dump_table(tables)
+
+    updata_sql(tables)
     pass
-    # copy_dir()
-    # global tables
-    #
-    # tables =str(raw_input('please input tables:\n'))
-    # # tables = 't_panel'
-    #
-    # dump_table(tables)
-
-import time
-spath = r'E:\upgrade\template'
-
-
-def outdir():
-    dirs = time.strftime("%m%d", time.localtime())
-    dpath = os.path.join(dirs)
-    while True:
-
-        if not os.path.exists(dpath):
-            shutil.copytree(spath, dpath)
-            break
-        else:
-            dpath = raw_input('please input direct:\n')
-    return dpath
-
-
-
-print outdir()
