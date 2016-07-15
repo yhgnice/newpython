@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # Created by   2016/07/13
 
-
 import time
 import os
 import shutil
@@ -10,7 +9,6 @@ import zipfile
 import re
 
 spath = r'E:\upgrade\template'
-
 
 cachelist = os.path.join(spath,'cachelist.html')
 
@@ -87,11 +85,12 @@ def updata_sql(tables):
 
 
 def main():
-    global tables
+
     dump_table(tables)
     updata_sql(tables)
 
 if __name__ == '__main__':
+    global tables
 
     tables =str(raw_input('please input tables:\n'))
     main()
