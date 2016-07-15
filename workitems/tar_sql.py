@@ -37,7 +37,7 @@ dpath = os.path.join('E:\upgrade',outdir())
 def dump_table(tables):
     try:
         output = dpath + '\db_gamedata_update.sql'
-        mysqlcmd = '''mysqldump  --lock-tables=false -h188.188.1.158 -uroot -plhb!@#$ aj2_gamedata_v2  {tables} t_identity_ver  > {output} '''.format(
+        mysqlcmd = '''mysqldump  --lock-tables=false -h188.188.1.158 -uroot -pxxxxxx aj2_gamedata_v2  {tables} t_identity_ver  > {output} '''.format(
             tables=tables, output=output)
         os.system(mysqlcmd)
         os.chdir(dpath)
