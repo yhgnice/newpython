@@ -7,6 +7,7 @@ import os
 import shutil
 import zipfile
 import re
+import webbrowser
 
 spath = r'E:\upgrade\template'
 
@@ -37,7 +38,7 @@ dpath = os.path.join('E:\upgrade',outdir())
 def dump_table(tables):
     try:
         output = dpath + '\db_gamedata_update.sql'
-        mysqlcmd = '''mysqldump  --lock-tables=false -h188.188.1.158 -uroot -pxxxxxx aj2_gamedata_v2  {tables} t_identity_ver  > {output} '''.format(
+        mysqlcmd = '''mysqldump  --lock-tables=false -h188.188.1.158 -uroot -plhb!@#$ aj2_gamedata_v2  {tables} t_identity_ver  > {output} '''.format(
             tables=tables, output=output)
         os.system(mysqlcmd)
         os.chdir(dpath)
@@ -84,14 +85,14 @@ def updata_sql(tables):
         html_re(searhstr)
 
 
-def main():
+def main(tables):
 
     dump_table(tables)
     updata_sql(tables)
+    webbrowser.open_new(cachelist)
 
 if __name__ == '__main__':
-    global tables
-
-    tables =str(raw_input('please input tables:\n'))
-    main()
     # tables = 't_panel'
+    tables =str(raw_input('please input tables:\n'))
+    main(tables)
+
