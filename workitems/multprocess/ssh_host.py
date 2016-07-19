@@ -3,6 +3,9 @@
 # Created by   2016/07/15 
 
 import paramiko
+from multiprocessing import Process, Pool
+import time
+import threading
 
 
 def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
@@ -14,26 +17,66 @@ def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
         key_filename = paramiko.DSSKey.from_private_key_file(key_path)
         ssh.connect(host, port, user, password, key_filename)
         stdin, stdout, stderr = ssh.exec_command(cmd)
-
         reseult['host'] = host
         reseult['stdout'] = stdout.read()
         reseult['stderr'] = stderr.read()
-        # cmd_result = stdout.read(),stderr.read()
-        # for line in cmd_result:
-        #     print line
-
     except Exception, e:
         reseult['err'] = e
     finally:
-        return reseult
+        # return reseult
+        '''
+        1.output
+        print host, "\t",
+        err_len = stderr.read()
+        if len(err_len) > 0:
+            print err_len
+        print stdout.read()
+        '''
+        print  reseult.get('host'),"\t",reseult.get('stderr'),reseult.get('stdout'),'\n',
         ssh.close()
 
 
+
+
 if __name__ == '__main__':
-    host = '61.160.242.95'
+    # host = '61.160.242.95'
     user = 'root'
     key_path = r'D:\Sessions\key\Identity_aj2'
     port = 59878
-    cmd = 'echo abcd'
-    print ssh_host_paramiko(host, user, key_path, port, cmd)
-    pass
+    # cmd = "ls /usr/local/aj2/lhbsid/123"
+    # cmd = "ls /root"
+    cmd = str(raw_input('Please input your cammand:\n'))
+    hostfile = r'c:\yhglist'
+
+    # res = raw_input('Please intpu Y').upper()
+
+    # if res == 'Y':
+    start = time.time()
+
+    with open(hostfile) as fe:
+        for line in fe.readlines():
+            sid = line.split()[0]
+            host_ip = line.split()[1]
+            newcmd = cmd.replace("lhbsid", sid)
+            a = threading.Thread(target=ssh_host_paramiko, name='ssh_processlist',
+                                 args=(host_ip, user, key_path, port, newcmd,))
+            a.start()
+        a.join()
+    '''
+
+    p = Pool(300)
+    with open(hostfile) as fe:
+        for line in fe.readlines():
+
+            host_ip = line.split()[1]
+
+            p.apply_async(ssh_host_paramiko, args=(host_ip,user,key_path,port,cmd,))
+
+
+    p.close()
+    p.join()
+
+    '''
+
+    end = time.time()
+    print 'Task  runs %0.2f seconds.' % ((end - start))
