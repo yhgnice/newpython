@@ -32,27 +32,12 @@ def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
             print err_len
         print stdout.read()
         '''
-        print  reseult.get('host'),"\t",reseult.get('stderr'),reseult.get('stdout'),'\n',
+        print  reseult.get('host'), "\t", reseult.get('stderr'), reseult.get('stdout'), '\n',
         ssh.close()
 
 
-
-
-if __name__ == '__main__':
-    # host = '61.160.242.95'
-    user = 'root'
-    key_path = r'D:\Sessions\key\Identity_aj2'
-    port = 59878
-    # cmd = "ls /usr/local/aj2/lhbsid/123"
-    # cmd = "ls /root"
-    cmd = str(raw_input('Please input your cammand:\n'))
-    hostfile = r'c:\yhglist'
-
-    # res = raw_input('Please intpu Y').upper()
-
-    # if res == 'Y':
+def main(hostfile):
     start = time.time()
-
     with open(hostfile) as fe:
         for line in fe.readlines():
             sid = line.split()[0]
@@ -62,6 +47,22 @@ if __name__ == '__main__':
                                  args=(host_ip, user, key_path, port, newcmd,))
             a.start()
         a.join()
+        end = time.time()
+        print 'Task  runs %0.2f seconds.' % ((end - start))
+
+
+if __name__ == '__main__':
+    user = 'root'
+    key_path = r'D:\Sessions\key\Identity_aj2'
+    port = 59878
+    cmd = str(raw_input('Please input your cammand:\n'))
+    hostfile = r'c:\yhglist'
+
+    res = raw_input('need to continue?，yes|no:\n').upper()
+
+    if res == 'Y':
+        main(hostfile)
+    print 'Bye,bye...'
     '''
 
     p = Pool(300)
@@ -78,5 +79,35 @@ if __name__ == '__main__':
 
     '''
 
-    end = time.time()
-    print 'Task  runs %0.2f seconds.' % ((end - start))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
