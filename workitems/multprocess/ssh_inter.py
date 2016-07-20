@@ -3,6 +3,7 @@
 # Created by   2016/07/15 
 
 import paramiko
+import re
 
 def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
     reseult = {}
@@ -26,7 +27,10 @@ def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
     except Exception, e:
         reseult['err'] = e
     finally:
-        return reseult
+        # return reseult
+        res  = re.findall('INFO: Server startup ina',reseult['stdout'])
+        if not res:
+            print host
         ssh.close()
 
 
@@ -35,6 +39,6 @@ if __name__ == '__main__':
     user = 'root'
     key_path = r'D:\Sessions\key\Identity_aj2'
     port = 59878
-    cmd = 'ifconfig eth0 '
+    cmd = 'tail -n500 /usr/local/aj2/0/aj2server/logs/catalina.out '
     new = ssh_host_paramiko(host, user, key_path, port, cmd)
-    print new['stdout']
+    # print new['stdout']

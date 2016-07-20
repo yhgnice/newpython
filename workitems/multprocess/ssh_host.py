@@ -6,6 +6,8 @@ import paramiko
 from multiprocessing import Process, Pool
 import time
 import threading
+import re
+
 
 
 def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
@@ -33,6 +35,9 @@ def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
         print stdout.read()
         '''
         print  reseult.get('host'), "\t", reseult.get('stderr'), reseult.get('stdout'), '\n',
+        res  = re.findall('INFO: Server startup in',reseult)
+        if res:
+            print 'OK'
         ssh.close()
 
 
@@ -58,7 +63,7 @@ if __name__ == '__main__':
     cmd = str(raw_input('Please input your cammand:\n'))
     hostfile = r'c:\yhglist'
 
-    res = raw_input('need to continue?，yes|no:\n').upper()
+    res = raw_input('确定是否继续执行，y or n:\n').upper()
 
     if res == 'Y':
         main(hostfile)
