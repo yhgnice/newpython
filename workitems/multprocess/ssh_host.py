@@ -5,7 +5,7 @@
 import paramiko
 from multiprocessing import Process, Pool
 import time
-import threading
+import threadingo
 import re
 
 
@@ -19,7 +19,7 @@ def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
         key_filename = paramiko.DSSKey.from_private_key_file(key_path)
         ssh.connect(host, port, user, password, key_filename)
         stdin, stdout, stderr = ssh.exec_command(cmd)
-        reseult['host'] = host
+        reseult['host'] = host + '#'
         reseult['stdout'] = stdout.read()
         reseult['stderr'] = stderr.read()
     except Exception, e:
@@ -35,9 +35,9 @@ def ssh_host_paramiko(host, user, key_path, port, cmd, password=None):
         print stdout.read()
         '''
         print  reseult.get('host'), "\t", reseult.get('stderr'), reseult.get('stdout'), '\n',
-        res  = re.findall('INFO: Server startup in',reseult)
-        if res:
-            print 'OK'
+        # res  = re.findall('INFO: Server startup in',reseult)
+        # if res:
+        #     print 'OK'
         ssh.close()
 
 
