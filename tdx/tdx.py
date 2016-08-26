@@ -6,7 +6,7 @@
 
 from struct import *
 import os
-os.chdir(r'C:\new_tdx\vipdoc\sz\lday')
+os.chdir(r'C:\·ÉÃ«ÍÈÈí¼ş\new_tdx\vipdoc\sz\lday')
 filepath=r'sz000680.day'
 ofile=open(filepath,'rb')
 buf=ofile.read()
